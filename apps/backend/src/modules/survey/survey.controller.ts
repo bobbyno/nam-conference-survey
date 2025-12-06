@@ -1,8 +1,9 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Get, Param } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { SurveyService } from './survey.service';
 import { CreateSurveyResponseDto } from './dto/create-survey-response.dto';
 import { SurveyResponseDto } from './dto/survey-response.dto';
+import { ResponseDetailDto } from './dto/response-detail.dto';
 
 @Controller('survey')
 export class SurveyController {
@@ -20,5 +21,17 @@ export class SurveyController {
     @Body() createSurveyResponseDto: CreateSurveyResponseDto,
   ): Promise<SurveyResponseDto> {
     return this.surveyService.submitSurvey(createSurveyResponseDto);
+  }
+
+  /**
+   * GET /api/survey/responses/:id
+   * Get complete response details by ID
+   */
+  @Get('responses/:id')
+  @HttpCode(HttpStatus.OK)
+  async getResponseDetails(
+    @Param('id') id: string,
+  ): Promise<ResponseDetailDto> {
+    return this.surveyService.getResponseDetails(id);
   }
 }

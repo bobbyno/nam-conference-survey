@@ -1,4 +1,4 @@
-import { AdminMetricsResponse, AdminRecentResponsesResponse } from '../types/admin';
+import { AdminMetricsResponse, AdminRecentResponsesResponse, ResponseDetail } from '../types/admin';
 
 const API_BASE_URL = '/api';
 
@@ -27,6 +27,21 @@ export async function getAdminRecentResponses(): Promise<AdminRecentResponsesRes
 
   if (!response.ok) {
     throw new Error('Failed to fetch recent responses');
+  }
+
+  return response.json();
+}
+
+export async function getResponseDetail(id: string): Promise<ResponseDetail> {
+  const response = await fetch(`${API_BASE_URL}/survey/responses/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch response details');
   }
 
   return response.json();

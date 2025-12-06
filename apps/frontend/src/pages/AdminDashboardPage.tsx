@@ -4,6 +4,7 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import { MetricCard } from '../components/MetricCard';
 import { RecentResponsesSection } from '../components/RecentResponsesSection';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { ResponseDetailModal } from '../components/admin/ResponseDetailModal';
 import { getAdminMetrics, getAdminRecentResponses } from '../api/admin';
 import { AdminMetricsResponse, AdminRecentResponsesResponse } from '../types/admin';
 
@@ -12,6 +13,8 @@ export default function AdminDashboardPage() {
   const [recentResponses, setRecentResponses] = useState<AdminRecentResponsesResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedResponseId, setSelectedResponseId] = useState<string | null>(null);
+  const [modalOpened, setModalOpened] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -37,6 +40,16 @@ export default function AdminDashboardPage() {
 
     fetchData();
   }, []);
+
+  const handleViewResponse = (responseId: string) => {
+    setSelectedResponseId(responseId);
+    setModalOpened(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpened(false);
+    setSelectedResponseId(null);
+  };
 
   return (
     <Container size="lg" py="xl">
@@ -100,6 +113,14 @@ export default function AdminDashboardPage() {
         <RecentResponsesSection
           responses={recentResponses?.responses ?? null}
           loading={loading}
+          onViewResponse={handleViewResponse}
+        />
+
+        {/* Response Detail Modal */}
+        <ResponseDetailModal
+          responseId={selectedResponseId}
+          opened={modalOpened}
+          onClose={handleCloseModal}
         />
       </Stack>
     </Container>

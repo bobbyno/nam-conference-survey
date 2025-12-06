@@ -4,6 +4,7 @@ import { RecentResponseItem } from '../types/admin';
 export interface RecentResponsesSectionProps {
   responses: RecentResponseItem[] | null;
   loading?: boolean;
+  onViewResponse?: (responseId: string) => void;
 }
 
 function formatTimestamp(isoString: string): string {
@@ -31,7 +32,7 @@ function formatResponseId(id: string): string {
   return `#${id.substring(0, 8)}`;
 }
 
-export function RecentResponsesSection({ responses, loading = false }: RecentResponsesSectionProps) {
+export function RecentResponsesSection({ responses, loading = false, onViewResponse }: RecentResponsesSectionProps) {
   if (loading) {
     return (
       <Stack gap="md">
@@ -89,8 +90,9 @@ export function RecentResponsesSection({ responses, loading = false }: RecentRes
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    // Modal interaction will be implemented in STORY-046
-                    console.log('View response:', response.id);
+                    if (onViewResponse) {
+                      onViewResponse(response.id);
+                    }
                   }}
                   aria-label={`View response ${formatResponseId(response.id)}`}
                 >

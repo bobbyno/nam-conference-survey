@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSurveyResponseDto } from './dto/create-survey-response.dto';
 import { SurveyResponseDto } from './dto/survey-response.dto';
+import { ResponseDetailDto, QuestionDetailDto } from './dto/response-detail.dto';
 import { Role, Status } from '@prisma/client';
 
 @Injectable()
@@ -137,5 +138,141 @@ export class SurveyService {
       result.status,
       result.createdAt,
     );
+  }
+
+  /**
+   * Get complete response details by ID
+   */
+  async getResponseDetails(id: string): Promise<ResponseDetailDto> {
+    const response = await this.prisma.surveyResponse.findUnique({
+      where: { id },
+    });
+
+    if (!response) {
+      throw new NotFoundException(`Response with ID ${id} not found`);
+    }
+
+    // Map all 19 questions to structured format
+    const questions: QuestionDetailDto[] = [
+      {
+        questionNumber: 1,
+        questionText: 'How would you rate your overall NAM Conference experience?',
+        questionType: 'likert',
+        answer: response.q1OverallRating,
+      },
+      {
+        questionNumber: 2,
+        questionText: 'Would you want to attend NAM Conference again next year?',
+        questionType: 'likert',
+        answer: response.q2ReturnIntent,
+      },
+      {
+        questionNumber: 3,
+        questionText: 'How valuable was the coworking day for networking and collaboration?',
+        questionType: 'likert-with-na',
+        answer: response.q3CoworkingEffectiveness,
+      },
+      {
+        questionNumber: 4,
+        questionText: 'Who did you most value connecting with at this conference?',
+        questionType: 'multiselect',
+        answer: response.q4ConnectionTypes,
+      },
+      {
+        questionNumber: 5,
+        questionText: 'How would you describe the quality of connections you made at this conference?',
+        questionType: 'likert',
+        answer: response.q5ConnectionDepth,
+      },
+      {
+        questionNumber: 6,
+        questionText: 'How would you rate the educational/learning value of the conference content?',
+        questionType: 'likert',
+        answer: response.q6LearningValue,
+      },
+      {
+        questionNumber: 7,
+        questionText: 'What topics would you like to see at future conferences?',
+        questionType: 'openended',
+        answer: response.q7FutureTopics,
+      },
+      {
+        questionNumber: 8,
+        questionText: 'The conference asks you to use personal time on a Saturday. Was this time commitment worth it for you?',
+        questionType: 'likert-with-na',
+        answer: response.q8SaturdayWorth,
+      },
+      {
+        questionNumber: 9,
+        questionText: 'How clear were your expectations before arriving at the conference?',
+        questionType: 'likert',
+        answer: response.q9PreConferenceCommunication,
+      },
+      {
+        questionNumber: 10,
+        questionText: 'How would you rate the hotel accommodations, conference venue, and catered meals and snacks?',
+        questionType: 'likert-with-na',
+        answer: response.q10AccommodationsVenue,
+      },
+      {
+        questionNumber: 11,
+        questionText: 'Rank the following session types in order of value to you',
+        questionType: 'ranking',
+        answer: response.q11SessionRankings,
+      },
+      {
+        questionNumber: 12,
+        questionText: 'Was the overall conference length appropriate?',
+        questionType: 'single-choice',
+        answer: response.q12ConferenceLength,
+      },
+      {
+        questionNumber: 13,
+        questionText: 'How does NAM Conference compare to other professional development opportunities you\'ve experienced?',
+        questionType: 'likert-with-na',
+        answer: response.q13ComparisonToPD,
+      },
+      {
+        questionNumber: 14,
+        questionText: 'What did you like most about the conference?',
+        questionType: 'openended',
+        answer: response.q14LikedMost,
+      },
+      {
+        questionNumber: 15,
+        questionText: 'Is there anything else you\'d like us to know about your conference experience?',
+        questionType: 'openended',
+        answer: response.q15AdditionalFeedback,
+      },
+      {
+        questionNumber: 16,
+        questionText: 'If you attended the last NAM Conference, did you notice improvements based on previous feedback?',
+        questionType: 'single-choice',
+        answer: response.q16Improvements,
+      },
+      {
+        questionNumber: 17,
+        questionText: 'What would make you most confident that your feedback will be acted upon?',
+        questionType: 'multiselect',
+        answer: response.q17FeedbackConfidence,
+      },
+      {
+        questionNumber: 18,
+        questionText: 'What is your current status with Equal Experts?',
+        questionType: 'single-choice',
+        answer: response.q18EmploymentStatus,
+      },
+      {
+        questionNumber: 19,
+        questionText: 'If comfortable please provide your name and home city and state.',
+        questionType: 'text-field',
+        answer: {
+          name: response.q19Name,
+          location: response.q19Location,
+        },
+      },
+    ];
+
+    return new ResponseDetailDto(response.id, response.createdAt, questions);
   }
 }
