@@ -1,10 +1,14 @@
-import { Container, Stack, Title, Text, Button, Image, Card } from '@mantine/core';
+import { Container, Stack, Title, Text, Button, Image, Card, Group } from '@mantine/core';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export default function ThankYouPage() {
   return (
     <Container size="sm" py="xl">
       <Card shadow="md" padding="xl" radius="md" withBorder>
         <Stack align="center" gap="xl">
+          <Group justify="flex-end" w="100%">
+            <ThemeToggle size="md" />
+          </Group>
           <Image
             src="https://www.equalexperts.com/wp-content/uploads/2024/10/2024-Logo.svg"
             alt="Equal Experts"

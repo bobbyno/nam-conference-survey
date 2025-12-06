@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Container, Stack, Title, SimpleGrid, Alert, Image } from '@mantine/core';
+import { Container, Stack, Title, SimpleGrid, Alert, Image, Group } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { MetricCard } from '../components/MetricCard';
 import { RecentResponsesSection } from '../components/RecentResponsesSection';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { getAdminMetrics, getAdminRecentResponses } from '../api/admin';
 import { AdminMetricsResponse, AdminRecentResponsesResponse } from '../types/admin';
 
@@ -42,13 +43,18 @@ export default function AdminDashboardPage() {
       <Stack gap="xl">
         {/* Header with Logo */}
         <Stack gap="md" align="center">
-          <Image
-            src="https://www.equalexperts.com/wp-content/uploads/2024/10/2024-Logo.svg"
-            alt="Equal Experts Logo"
-            h={60}
-            w="auto"
-            fit="contain"
-          />
+          <Group justify="space-between" w="100%" style={{ position: 'relative' }}>
+            <div style={{ width: 48 }} /> {/* Spacer for centering */}
+            <Image
+              src="https://www.equalexperts.com/wp-content/uploads/2024/10/2024-Logo.svg"
+              alt="Equal Experts Logo"
+              h={60}
+              w="auto"
+              fit="contain"
+              style={{ margin: '0 auto' }}
+            />
+            <ThemeToggle size="md" />
+          </Group>
           <Title order={1} ta="center" c="#22567c">
             Admin Dashboard
           </Title>

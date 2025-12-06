@@ -10,11 +10,13 @@ import {
   Loader,
   Center,
   Text,
+  Group,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconAlertCircle, IconCheck } from '@tabler/icons-react';
 import { ProgressIndicator } from '../components/ProgressIndicator';
 import { QuestionRenderer } from '../components/QuestionRenderer';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { SurveyFormState } from '../types/survey';
 import { submitSurvey } from '../api/survey';
 import { SURVEY_QUESTIONS, TOTAL_QUESTIONS } from '../config/survey-questions';
@@ -143,12 +145,17 @@ export default function SurveyPage() {
       <Stack gap="xl">
         {/* Header */}
         <Stack align="center" gap="md">
-          <Image
-            src="https://www.equalexperts.com/wp-content/uploads/2024/10/2024-Logo.svg"
-            alt="Equal Experts"
-            h={60}
-            w="auto"
-          />
+          <Group justify="space-between" w="100%" style={{ position: 'relative' }}>
+            <div style={{ width: 48 }} /> {/* Spacer for centering */}
+            <Image
+              src="https://www.equalexperts.com/wp-content/uploads/2024/10/2024-Logo.svg"
+              alt="Equal Experts"
+              h={60}
+              w="auto"
+              style={{ margin: '0 auto' }}
+            />
+            <ThemeToggle size="md" />
+          </Group>
           <Title order={1} ta="center" c="equalBlue.4">
             NAM Conference Survey
           </Title>
