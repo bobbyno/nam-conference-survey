@@ -17,6 +17,9 @@ Master index of all stories that have been created but not yet built. Stories ar
 | STORY-049 | Analytics Tab | Must Have | 2025-12-02-admin-page |
 | STORY-050 | Sentiment Analysis Tab | Should Have | 2025-12-02-admin-page |
 | STORY-051 | Data Export | Should Have | 2025-12-02-admin-page |
+| STORY-052 | AI Feedback Summary Generation | Must Have | 2025-12-06-feedback-summary |
+| STORY-053 | Feedback Report Management | Must Have | 2025-12-06-feedback-summary |
+| STORY-054 | Feedback Summary PDF Export | Should Have | 2025-12-06-feedback-summary |
 
 ---
 
